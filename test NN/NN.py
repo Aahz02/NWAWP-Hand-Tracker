@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 from imutils import paths
 import cv2
 import os
+import random
 
 data = []
 labels = []
@@ -19,8 +20,12 @@ labels = []
 test_data = []
 test_labels = []
 
-imagePaths = paths.list_images("images")
-testImagePaths = paths.list_images("test_images")
+imagePaths = sorted(list(paths.list_images("images")))
+testImagePaths = sorted(list(paths.list_images("test_images")))
+
+random.seed(420)
+random.shuffle(imagePaths)
+random.shuffle(testImagePaths)
 
 for imagePath in imagePaths:
     image = cv2.imread(imagePath)
@@ -49,9 +54,13 @@ y_test = np.array(test_labels)
 
 model = keras.Sequential([
     keras.layers.Input((28, 28, 3)),
+    keras.layers.Dense(40, activation=tf.nn.relu,),
+    keras.layers.Conv2D(32, (5, 5), padding="same", activation=tf.nn.relu),
+    keras.layers.MaxPool2D((2, 2), 2),
+    keras.layers.Conv2D(64, (5, 5), padding="same", activation=tf.nn.relu),
+    keras.layers.MaxPool2D((2, 2), 2),
     keras.layers.Flatten(),
-    keras.layers.Dense(10, activation=tf.nn.relu,),
-    keras.layers.Dense(10, activation=tf.nn.relu),
+    keras.layers.Dense(85, activation=tf.nn.relu),
     keras.layers.Dense(2, activation=tf.nn.softmax)
 ])
 
@@ -68,4 +77,4 @@ print(y_train.shape)
 
 model.summary()
 
-model.fit(x_train, y_train, batch_size=2, epochs=5, validation_data=(x_test, y_test))
+model.fit(x_train, y_train, batch_size=16, epochs=5, validation_data=(x_test, y_test))
