@@ -20,8 +20,11 @@ labels = []
 test_data = []
 test_labels = []
 
+predict_data = []
+
 imagePaths = sorted(list(paths.list_images("images")))
 testImagePaths = sorted(list(paths.list_images("test_images")))
+predictImagePaths = sorted(list(paths.list_images("predict_images")))
 
 random.seed(420)
 random.shuffle(imagePaths)
@@ -30,7 +33,6 @@ random.shuffle(testImagePaths)
 for imagePath in imagePaths:
     image = cv2.imread(imagePath)
     image = cv2.resize(image, (28, 28))
-    image = keras.preprocessing.image.img_to_array(image)
     data.append(image)
 
     label = imagePath.split(os.path.sep)[-2]
@@ -46,11 +48,18 @@ for testPath in testImagePaths:
     label = 1 if label == "open_hand" else 0
     test_labels.append(label)
 
+for predictPath in predictImagePaths:
+    image = cv2.imread(predictPath)
+    image = cv2.resize(image, (28, 28))
+    predict_data.append(image)
+
 x_train = np.array(data)
 y_train = np.array(labels)
 
 x_test = np.array(test_data)
 y_test = np.array(test_labels)
+
+x_predict = np.array(predict_data)
 
 model = keras.Sequential([
     keras.layers.Input((28, 28, 3)),
@@ -81,4 +90,41 @@ print(y_train.shape)
 
 model.summary()
 
-model.fit(x_train, y_train, batch_size=32, epochs=15, validation_data=(x_test, y_test))
+checkpoint_path = "training_3/cp.ckpt"
+checkpoint_dir = os.path.dirname(checkpoint_path)
+
+# Create checkpoint callback
+cp_callback = tf.keras.callbacks.ModelCheckpoint(checkpoint_path,
+                                                 save_weights_only=True,
+                                                 verbose=1)
+
+model.fit(x_train, y_train, batch_size=32, epochs=10, validation_data=(x_test, y_test), callbacks = [cp_callback])
+
+class_names = ["Closed", "Open"]
+
+def plot_value_array(i, predictions_array, true_label):
+  predictions_array = predictions_array[i]
+  plt.grid(False)
+  plt.xticks([])
+  plt.yticks([])
+  thisplot = plt.bar(range(10), predictions_array, color="#777777")
+  plt.ylim([0, 1])
+  predicted_label = np.argmax(predictions_array)
+  
+  thisplot[predicted_label].set_color('red')
+  thisplot[true_label].set_color('blue')
+
+img = predict_data[0]
+
+img = (np.expand_dims(img,0))
+
+print(img.shape)
+
+predictions_single = model.predict(img)
+
+# plot_value_array(0, predictions_single, 1)
+# plt.xticks(range(10), class_names, rotation=45)
+# plt.show()
+
+prediction_result = np.argmax(predictions_single[0])
+print(prediction_result)
