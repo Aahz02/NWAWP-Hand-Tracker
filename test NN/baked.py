@@ -16,14 +16,14 @@ import random
 
 predict_data = []
 
-predictImagePaths = sorted(list(paths.list_images("predict_images")))
+#predictImagePaths = sorted(list(paths.list_images("predict_images")))
 
-for predictPath in predictImagePaths:
-    image = cv2.imread(predictPath)
-    image = cv2.resize(image, (28, 28))
-    predict_data.append(image)
+# for predictPath in predictImagePaths:
+#     image = cv2.imread(predictPath)
+#     image = cv2.resize(image, (28, 28))
+#     predict_data.append(image)
 
-x_predict = np.array(predict_data)
+# x_predict = np.array(predict_data)
 
 model = keras.Sequential([
     keras.layers.Input((28, 28, 3)),
@@ -53,13 +53,26 @@ checkpoint_path = "training_3/cp.ckpt"
 checkpoint_dir = os.path.dirname(checkpoint_path)
 
 model.load_weights(checkpoint_path)
+while True:
+    imageName = input("Enter the name of the image you want to predict:    (include the file type)\n")
+    if imageName.lower() == "close": break
+    image = cv2.imread("predict_images" + os.path.sep + imageName)
+    if image is None:
+        print("Error: could not find image")
+        continue
+    image = cv2.resize(image, (28, 28))
+    images = []
+    images.append(image)
+    x_predict = np.array(images)
+    prediction = np.argmax(model.predict(x_predict))
+    print(prediction)
 
-predictions = model.predict(x_predict)
+# predictions = model.predict(x_predict)
 
-readable_predicts = []
+# readable_predicts = []
 
-for prediction in predictions:
-    readable_predicts.append(np.argmax(prediction))
+# for prediction in predictions:
+#     readable_predicts.append(np.argmax(prediction))
 
-print(predictImagePaths)
-print(readable_predicts)
+# print(predictImagePaths)
+# print(readable_predicts)
