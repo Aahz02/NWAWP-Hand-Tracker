@@ -19,6 +19,8 @@ import argparse
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True, 
     help="file path to the image to be predicted")
+ap.add_argument("-c", "--checkpoint", requried=True,
+    help="file path to the tensor checkpoints")
 args = vars(ap.parse_args())
 
 predict_data = []
