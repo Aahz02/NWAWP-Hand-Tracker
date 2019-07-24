@@ -17,8 +17,8 @@ import random
 import argparse
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--images", required=True, 
-    help="file path to the images to be predicted")
+ap.add_argument("-i", "--image", required=True, 
+    help="file path to the image to be predicted")
 args = vars(ap.parse_args())
 
 predict_data = []
@@ -61,7 +61,7 @@ checkpoint_dir = os.path.dirname(checkpoint_path)
 
 model.load_weights(checkpoint_path)
 while True:
-    image = cv2.imread(args[0])
+    image = cv2.imread(args["image"])
     image = cv2.resize(image, (28, 28))
     images = []
     images.append(image)
