@@ -61,7 +61,7 @@ model.summary()
 checkpoint_path = "training_3/cp.ckpt"
 checkpoint_dir = os.path.dirname(checkpoint_path)
 
-model.load_weights(checkpoint_path)
+model.load_weights(args["checkpoint"])
 while True:
     image = cv2.imread(args["image"])
     image = cv2.resize(image, (28, 28))
