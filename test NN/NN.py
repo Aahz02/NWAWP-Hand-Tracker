@@ -90,7 +90,7 @@ print(y_train.shape)
 
 model.summary()
 
-checkpoint_path = "training_21/cp.ckpt"
+checkpoint_path = "training_24/cp.ckpt"
 checkpoint_dir = os.path.dirname(checkpoint_path)
 
 # Create checkpoint callback
@@ -98,7 +98,7 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(checkpoint_path,
                                                  save_weights_only=True,
                                                  verbose=1)
 
-model.fit(x_train, y_train, batch_size=16, epochs=9, validation_data=(x_test, y_test), callbacks = [cp_callback])
+model.fit(x_train, y_train, epochs=9, validation_data=(x_test, y_test), callbacks = [cp_callback])
 
 class_names = ["Closed", "Open"]
 

@@ -49,7 +49,7 @@ model.compile(
 
 model.summary()
 
-checkpoint_path = "training_21/cp.ckpt"
+checkpoint_path = "training_22/cp.ckpt"
 checkpoint_dir = os.path.dirname(checkpoint_path)
 
 model.load_weights(checkpoint_path)
