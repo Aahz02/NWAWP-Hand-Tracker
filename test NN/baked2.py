@@ -47,7 +47,7 @@ model = keras.Sequential([
     keras.layers.Dropout(0.22),
     keras.layers.Flatten(),
     keras.layers.Dense(115, activation=tf.nn.relu),
-    keras.layers.Dense(2, activation=tf.nn.softmax)
+    keras.layers.Dense(4, activation=tf.nn.softmax)
 ])
 
 model.compile(
@@ -58,7 +58,7 @@ model.compile(
 
 model.summary()
 
-checkpoint_path = "training_3/cp.ckpt"
+checkpoint_path = "training_7/cp.ckpt"
 checkpoint_dir = os.path.dirname(checkpoint_path)
 
 model.load_weights(args["checkpoint"])

@@ -36,7 +36,7 @@ for imagePath in imagePaths:
     data.append(image)
 
     label = imagePath.split(os.path.sep)[-2]
-    label = 1 if label == "open_hand" else 0
+    label = 1 if label == "open_hand" else 2 if label == "thumbs_up" else 3 if label == "thumbs_down" else 0
     labels.append(label)
 
 for testPath in testImagePaths:
@@ -45,7 +45,7 @@ for testPath in testImagePaths:
     test_data.append(image)
 
     label = testPath.split(os.path.sep)[-2]
-    label = 1 if label == "open_hand" else 0
+    label = 1 if label == "open_hand" else 2 if label == "thumbs_up" else 3 if label == "thumbs_down" else 0
     test_labels.append(label)
 
 for predictPath in predictImagePaths:
@@ -63,18 +63,18 @@ x_predict = np.array(predict_data)
 
 model = keras.Sequential([
     keras.layers.Input((28, 28, 3)),
-    keras.layers.Dense(35, activation=tf.nn.relu),
+    keras.layers.Dense(60, activation=tf.nn.relu),
     keras.layers.Conv2D(16, (5, 5), padding="same", activation=tf.nn.relu),
     keras.layers.MaxPool2D((2, 2), 2),
-    keras.layers.Dense(70, activation=tf.nn.relu),
+    keras.layers.Dense(80, activation=tf.nn.relu),
     keras.layers.Conv2D(32, (5, 5), padding="same", activation=tf.nn.relu),
     keras.layers.MaxPool2D((2, 2), 2),
-    keras.layers.Conv2D(32, (5, 5), padding="same", activation=tf.nn.relu),
+    keras.layers.Conv2D(64, (5, 5), padding="same", activation=tf.nn.relu),
     keras.layers.MaxPool2D((2, 2), 2),
     keras.layers.Dropout(0.22),
     keras.layers.Flatten(),
-    keras.layers.Dense(115, activation=tf.nn.relu),
-    keras.layers.Dense(2, activation=tf.nn.softmax)
+    keras.layers.Dense(135, activation=tf.nn.relu),
+    keras.layers.Dense(4, activation=tf.nn.softmax)
 ])
 
 model.compile(
@@ -90,7 +90,7 @@ print(y_train.shape)
 
 model.summary()
 
-checkpoint_path = "training_3/cp.ckpt"
+checkpoint_path = "training_21/cp.ckpt"
 checkpoint_dir = os.path.dirname(checkpoint_path)
 
 # Create checkpoint callback
@@ -98,7 +98,7 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(checkpoint_path,
                                                  save_weights_only=True,
                                                  verbose=1)
 
-model.fit(x_train, y_train, batch_size=32, epochs=10, validation_data=(x_test, y_test), callbacks = [cp_callback])
+model.fit(x_train, y_train, batch_size=16, epochs=9, validation_data=(x_test, y_test), callbacks = [cp_callback])
 
 class_names = ["Closed", "Open"]
 
