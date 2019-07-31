@@ -63,8 +63,9 @@ checkpoint_dir = os.path.dirname(checkpoint_path)
 
 model.load_weights(args["checkpoint"])
 
+i = 0
 while True:
-    output = open("output.txt", "w")
+    output = open("output" + str(i) + ".txt", "w")
     image = cv2.imread(args["image"])
     image = cv2.resize(image, (28, 28))
     images = []
@@ -73,6 +74,9 @@ while True:
     prediction = np.argmax(model.predict(x_predict))
     output.write(str(prediction))
     output.close()
+    i += 1
+    if i > 4:
+        i = 0
 
 # predictions = model.predict(x_predict)
 
