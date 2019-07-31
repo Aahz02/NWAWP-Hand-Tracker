@@ -36,17 +36,17 @@ predict_data = []
 
 model = keras.Sequential([
     keras.layers.Input((28, 28, 3)),
-    keras.layers.Dense(35, activation=tf.nn.relu),
+    keras.layers.Dense(60, activation=tf.nn.relu),
     keras.layers.Conv2D(16, (5, 5), padding="same", activation=tf.nn.relu),
     keras.layers.MaxPool2D((2, 2), 2),
-    keras.layers.Dense(70, activation=tf.nn.relu),
+    keras.layers.Dense(90, activation=tf.nn.relu),
     keras.layers.Conv2D(32, (5, 5), padding="same", activation=tf.nn.relu),
     keras.layers.MaxPool2D((2, 2), 2),
-    keras.layers.Conv2D(32, (5, 5), padding="same", activation=tf.nn.relu),
+    keras.layers.Conv2D(64, (5, 5), padding="same", activation=tf.nn.relu),
     keras.layers.MaxPool2D((2, 2), 2),
-    keras.layers.Dropout(0.22),
+    #keras.layers.Dropout(0.22),
     keras.layers.Flatten(),
-    keras.layers.Dense(115, activation=tf.nn.relu),
+    keras.layers.Dense(135, activation=tf.nn.relu),
     keras.layers.Dense(4, activation=tf.nn.softmax)
 ])
 

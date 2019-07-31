@@ -63,10 +63,10 @@ x_predict = np.array(predict_data)
 
 model = keras.Sequential([
     keras.layers.Input((28, 28, 3)),
-    keras.layers.Dense(60, activation=tf.nn.relu),
+    keras.layers.Dense(65, activation=tf.nn.relu),
     keras.layers.Conv2D(16, (5, 5), padding="same", activation=tf.nn.relu),
     keras.layers.MaxPool2D((2, 2), 2),
-    keras.layers.Dense(80, activation=tf.nn.relu),
+    keras.layers.Dense(90, activation=tf.nn.relu),
     keras.layers.Conv2D(32, (5, 5), padding="same", activation=tf.nn.relu),
     keras.layers.MaxPool2D((2, 2), 2),
     keras.layers.Conv2D(64, (5, 5), padding="same", activation=tf.nn.relu),
@@ -90,7 +90,7 @@ print(y_train.shape)
 
 model.summary()
 
-checkpoint_path = "training_24/cp.ckpt"
+checkpoint_path = "training_32/cp.ckpt"
 checkpoint_dir = os.path.dirname(checkpoint_path)
 
 # Create checkpoint callback
@@ -98,7 +98,7 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(checkpoint_path,
                                                  save_weights_only=True,
                                                  verbose=1)
 
-model.fit(x_train, y_train, epochs=9, validation_data=(x_test, y_test), callbacks = [cp_callback])
+model.fit(x_train, y_train, batch_size=8, epochs=15, validation_data=(x_test, y_test), callbacks = [cp_callback])
 
 class_names = ["Closed", "Open"]
 

@@ -30,12 +30,12 @@ model = keras.Sequential([
     keras.layers.Dense(60, activation=tf.nn.relu),
     keras.layers.Conv2D(16, (5, 5), padding="same", activation=tf.nn.relu),
     keras.layers.MaxPool2D((2, 2), 2),
-    keras.layers.Dense(80, activation=tf.nn.relu),
+    keras.layers.Dense(90, activation=tf.nn.relu),
     keras.layers.Conv2D(32, (5, 5), padding="same", activation=tf.nn.relu),
     keras.layers.MaxPool2D((2, 2), 2),
     keras.layers.Conv2D(64, (5, 5), padding="same", activation=tf.nn.relu),
     keras.layers.MaxPool2D((2, 2), 2),
-    keras.layers.Dropout(0.22),
+    #keras.layers.Dropout(0.22),
     keras.layers.Flatten(),
     keras.layers.Dense(135, activation=tf.nn.relu),
     keras.layers.Dense(4, activation=tf.nn.softmax)
@@ -49,7 +49,7 @@ model.compile(
 
 model.summary()
 
-checkpoint_path = "training_22/cp.ckpt"
+checkpoint_path = "training_31/cp.ckpt"
 checkpoint_dir = os.path.dirname(checkpoint_path)
 
 model.load_weights(checkpoint_path)
