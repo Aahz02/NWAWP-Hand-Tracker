@@ -18,7 +18,7 @@ import argparse
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True, 
-    help="file path to the image to be predicted")
+    help="file path to the image folder to be predicted")
 ap.add_argument("-c", "--checkpoint", required=True,
     help="file path to the tensor checkpoints")
 args = vars(ap.parse_args())
@@ -63,10 +63,10 @@ checkpoint_dir = os.path.dirname(checkpoint_path)
 
 model.load_weights(args["checkpoint"])
 
-i = 0
 while True:
-    output = open("output" + str(i) + ".txt", "w")
-    image = cv2.imread(args["image"])
+    imageName = input()
+    output = open("output.txt", "w")
+    image = cv2.imread(args["image"] + imageName)
     image = cv2.resize(image, (28, 28))
     images = []
     images.append(image)
@@ -74,9 +74,6 @@ while True:
     prediction = np.argmax(model.predict(x_predict))
     output.write(str(prediction))
     output.close()
-    i += 1
-    if i > 4:
-        i = 0
 
 # predictions = model.predict(x_predict)
 
