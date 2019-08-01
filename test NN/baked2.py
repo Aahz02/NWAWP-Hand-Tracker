@@ -66,7 +66,7 @@ model.load_weights(args["checkpoint"])
 while True:
     imageName = input()
     output = open("output.txt", "w")
-    image = cv2.imread(args["image"] + imageName)
+    image = cv2.imread(args["image"] + os.path.sep + imageName)
     image = cv2.resize(image, (28, 28))
     images = []
     images.append(image)
