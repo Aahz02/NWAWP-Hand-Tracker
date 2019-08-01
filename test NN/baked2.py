@@ -16,6 +16,8 @@ import random
 
 import argparse
 
+import sys
+
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True, 
     help="file path to the image folder to be predicted")
@@ -63,17 +65,19 @@ checkpoint_dir = os.path.dirname(checkpoint_path)
 
 model.load_weights(args["checkpoint"])
 
+s = sys.stdin.readline().strip()
+
 while True:
-    imageName = input()
-    output = open("output.txt", "w")
-    image = cv2.imread(args["image"] + os.path.sep + imageName)
-    image = cv2.resize(image, (28, 28))
-    images = []
-    images.append(image)
-    x_predict = np.array(images)
-    prediction = np.argmax(model.predict(x_predict))
-    output.write(str(prediction))
-    output.close()
+    if s.contains(".png"):
+        output = open("output.txt", "w")
+        image = cv2.imread(args["image"] + os.path.sep + s)
+        image = cv2.resize(image, (28, 28))
+        images = []
+        images.append(image)
+        x_predict = np.array(images)
+        prediction = np.argmax(model.predict(x_predict))
+        output.write(str(prediction))
+        output.close()
 
 # predictions = model.predict(x_predict)
 
